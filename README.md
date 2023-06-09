@@ -6,6 +6,7 @@ yolov8 瑞芯微 rknn 板端 C++部署，使用平台 rk3588。模型转换参�
 1）编译
 
 cd examples
+
 /rknn_yolov8_demo_open
 
 bash build-linux_RK3588.sh
@@ -13,6 +14,7 @@ bash build-linux_RK3588.sh
 2）运行
 
 cd install/rknn_yolov8_demo
+
 ./rknn_yolov8_demo
 
 注意：修改模型、测试图像、保存图像的路径
