@@ -15,6 +15,21 @@ bash build-linux_RK3588.sh
 cd install/rknn_yolov8_demo
 ./rknn_yolov8_demo
 
+注意：修改模型、测试图像、保存图像的路径
+```
+
+int main(int argc, char **argv)
+{
+    char model_path[256] = "/home/zhangqian/rknn/rknpu2_1.4.0/examples/rknn_yolov8_demo_open/model/RK3588/yolov8n_ZQ.rknn";
+    char image_path[256] = "/home/zhangqian/rknn/rknpu2_1.4.0/examples/rknn_yolov8_demo_open/test.jpg";
+    char save_image_path[256] = "/home/zhangqian/rknn/rknpu2_1.4.0/examples/rknn_yolov8_demo_open/test_result.jpg";
+
+    detect(model_path, image_path, save_image_path);
+    return 0;
+}
+```
+
+
 # 测试效果
 
 
