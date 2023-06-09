@@ -15,7 +15,8 @@ bash build-linux_RK3588.sh
 cd install/rknn_yolov8_demo
 ./rknn_yolov8_demo
 
-# 部署测试效果
+# 测试效果
+
 
 冒号“:”前的数子是coco的80类对应的类别，后面的浮点数是目标得分。（类别:得分）
 
