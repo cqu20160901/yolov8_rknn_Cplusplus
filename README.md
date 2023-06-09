@@ -2,6 +2,17 @@
 
 yolov8 瑞芯微 rknn 板端 C++部署，使用平台 rk3588。模型转换参考 [onnx转rknn](https://github.com/cqu20160901/yolov8n_onnx_tensorRT_rknn_horizon) ， 仿真参考[PC仿真](https://github.com/cqu20160901/yolov8n_onnx_tensorRT_rknn_horizon) 。
 
+## 编译和运行
+1）编译
+cd examples
+/rknn_yolov8_demo_open
+
+bash build-linux_RK3588.sh
+
+2）运行
+cd install/rknn_yolov8_demo
+./rknn_yolov8_demo
+
 # 部署测试效果
 
 冒号“:”前的数子是coco的80类对应的类别，后面的浮点数是目标得分。（类别:得分）
