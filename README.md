@@ -15,7 +15,7 @@ cd install/rknn_yolov8_demo
 
 ./rknn_yolov8_demo
 
-注意：修改模型、测试图像、保存图像的路径
+注意：修改模型、测试图像、保存图像的路径，修改文件为src下的main.cc
 ```
 
 int main(int argc, char **argv)
