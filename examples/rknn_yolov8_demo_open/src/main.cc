@@ -255,7 +255,7 @@ int detect(char *model_path, char *image_path, char *save_image_path)
         out_zps.push_back(output_attrs[i].zp);
     }
 
-    int8_t *pblob[1];
+    int8_t *pblob[6];
     for (int i = 0; i < io_num.n_output; ++i)
     {
         pblob[i] = (int8_t *)outputs[i].buf;
