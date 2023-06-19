@@ -9,12 +9,6 @@
 typedef signed char int8_t;
 typedef unsigned int uint32_t;
 
-typedef struct XYSTACK
-{
-    int s32Min;
-    int s32Max;
-} XYSTACK_S;
-
 typedef struct
 {
     float xmin;
