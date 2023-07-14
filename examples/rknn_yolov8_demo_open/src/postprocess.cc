@@ -106,6 +106,8 @@ int GetResultRectYolov8::GetConvDetectionResult(int8_t **pBlob, std::vector<int>
     int gridIndex = -2;
     float xmin = 0, ymin = 0, xmax = 0, ymax = 0;
     float cls_val = 0;
+    float cls_max = 0;
+    int cls_index = 0;
 
     int quant_zp_cls = 0, quant_zp_reg = 0;
     float quant_scale_cls = 0, quant_scale_reg = 0;
@@ -134,28 +136,42 @@ int GetResultRectYolov8::GetConvDetectionResult(int8_t **pBlob, std::vector<int>
                 {
                     cls_val = sigmoid(DeQnt2F32(cls[cl * mapSize[index][0] * mapSize[index][1] + h * mapSize[index][1] + w], quant_zp_cls, quant_scale_cls));
 
-                    if (cls_val > objectThresh)
+                    if(0 == cl)
                     {
-                        xmin = (meshgrid[gridIndex + 0] - DeQnt2F32(reg[0 * mapSize[index][0] * mapSize[index][1] + h * mapSize[index][1] + w], quant_zp_reg, quant_scale_reg)) * strides[index];
-                        ymin = (meshgrid[gridIndex + 1] - DeQnt2F32(reg[1 * mapSize[index][0] * mapSize[index][1] + h * mapSize[index][1] + w], quant_zp_reg, quant_scale_reg)) * strides[index];
-                        xmax = (meshgrid[gridIndex + 0] + DeQnt2F32(reg[2 * mapSize[index][0] * mapSize[index][1] + h * mapSize[index][1] + w], quant_zp_reg, quant_scale_reg)) * strides[index];
-                        ymax = (meshgrid[gridIndex + 1] + DeQnt2F32(reg[3 * mapSize[index][0] * mapSize[index][1] + h * mapSize[index][1] + w], quant_zp_reg, quant_scale_reg)) * strides[index];
-
-                        xmin = xmin > 0 ? xmin : 0;
-                        ymin = ymin > 0 ? ymin : 0;
-                        xmax = xmax < input_w ? xmax : input_w;
-                        ymax = ymax < input_h ? ymax : input_h;
-
-                        if (xmin >= 0 && ymin >= 0 && xmax <= input_w && ymax <= input_h)
+                        cls_max = cls_val;
+                        cls_index = cl;
+                    }
+                    else
+                    {
+                        if(cls_val > cls_max)
                         {
-                            temp.xmin = xmin / input_w;
-                            temp.ymin = ymin / input_h;
-                            temp.xmax = xmax / input_w;
-                            temp.ymax = ymax / input_h;
-                            temp.classId = cl;
-                            temp.score = cls_val;
-                            detectRects.push_back(temp);
+                            cls_max = cls_val;
+                            cls_index = cl;
                         }
+                    }
+                }
+
+                if (cls_max > objectThresh)
+                {
+                    xmin = (meshgrid[gridIndex + 0] - DeQnt2F32(reg[0 * mapSize[index][0] * mapSize[index][1] + h * mapSize[index][1] + w], quant_zp_reg, quant_scale_reg)) * strides[index];
+                    ymin = (meshgrid[gridIndex + 1] - DeQnt2F32(reg[1 * mapSize[index][0] * mapSize[index][1] + h * mapSize[index][1] + w], quant_zp_reg, quant_scale_reg)) * strides[index];
+                    xmax = (meshgrid[gridIndex + 0] + DeQnt2F32(reg[2 * mapSize[index][0] * mapSize[index][1] + h * mapSize[index][1] + w], quant_zp_reg, quant_scale_reg)) * strides[index];
+                    ymax = (meshgrid[gridIndex + 1] + DeQnt2F32(reg[3 * mapSize[index][0] * mapSize[index][1] + h * mapSize[index][1] + w], quant_zp_reg, quant_scale_reg)) * strides[index];
+
+                    xmin = xmin > 0 ? xmin : 0;
+                    ymin = ymin > 0 ? ymin : 0;
+                    xmax = xmax < input_w ? xmax : input_w;
+                    ymax = ymax < input_h ? ymax : input_h;
+
+                    if (xmin >= 0 && ymin >= 0 && xmax <= input_w && ymax <= input_h)
+                    {
+                        temp.xmin = xmin / input_w;
+                        temp.ymin = ymin / input_h;
+                        temp.xmax = xmax / input_w;
+                        temp.ymax = ymax / input_h;
+                        temp.classId = cls_index;
+                        temp.score = cls_max;
+                        detectRects.push_back(temp);
                     }
                 }
             }
@@ -165,6 +181,7 @@ int GetResultRectYolov8::GetConvDetectionResult(int8_t **pBlob, std::vector<int>
     std::sort(detectRects.begin(), detectRects.end(), [](DetectRect &Rect1, DetectRect &Rect2) -> bool
               { return (Rect1.score > Rect2.score); });
 
+    std::cout << "NMS Before num :" << detectRects.size() << std::endl;
     for (int i = 0; i < detectRects.size(); ++i)
     {
         float xmin1 = detectRects[i].xmin;
