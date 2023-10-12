@@ -1,6 +1,6 @@
 # yolov8_rknn_Cplusplus
 
-yolov8 瑞芯微 rknn 板端 C++部署，使用平台 rk3588。模型转换参考 [onnx转rknn](https://github.com/cqu20160901/yolov8n_onnx_tensorRT_rknn_horizon) ， 仿真参考[PC仿真](https://github.com/cqu20160901/yolov8n_onnx_tensorRT_rknn_horizon) 。
+yolov8 瑞芯微 rknn 板端 C++部署，使用平台 rk3588。模型转换参考 [onnx转rknn](https://blog.csdn.net/zhangqian_1/article/details/128918268) ， 仿真参考[PC仿真](https://github.com/cqu20160901/yolov8n_onnx_tensorRT_rknn_horizon) 。
 
 ## 编译和运行
 
