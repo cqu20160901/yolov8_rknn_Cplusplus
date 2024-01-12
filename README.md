@@ -53,6 +53,10 @@ int main(int argc, char **argv)
 ![image](https://github.com/cqu20160901/yolov8_rknn_Cplusplus/assets/22290931/9e13c2b9-b666-45c6-bdb5-340253a69e95)
 
 
+2024年1月12日对后处理进行了优化，后处理时耗有所降低。
+![image](https://github.com/cqu20160901/yolov8_rknn_Cplusplus/assets/22290931/69ca1aa4-88e5-49e4-915e-3fa84384e90d)
+
+
 # 相关参考链接
 
 [【yolov8 瑞芯微RKNN和地平线Horizon芯片仿真测试部署】](https://blog.csdn.net/zhangqian_1/article/details/128918268)
