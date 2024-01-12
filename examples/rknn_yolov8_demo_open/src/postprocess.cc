@@ -132,26 +132,33 @@ int GetResultRectYolov8::GetConvDetectionResult(int8_t **pBlob, std::vector<int>
             {
                 gridIndex += 2;
 
-                for (int cl = 0; cl < class_num; cl++)
+                if (1 == class_num)
                 {
-                    cls_val = cls[cl * mapSize[index][0] * mapSize[index][1] + h * mapSize[index][1] + w];
+                    cls_max = sigmoid(DeQnt2F32(cls[0 * mapSize[index][0] * mapSize[index][1] + h * mapSize[index][1] + w], quant_zp_cls, quant_scale_cls));
+                    cls_index = 0;
+                }
+		else
+		{
+                    for (int cl = 0; cl < class_num; cl++)
+                    {
+			cls_val = cls[cl * mapSize[index][0] * mapSize[index][1] + h * mapSize[index][1] + w];
 
-                    if (0 == cl)
-                    {
-                        cls_max = cls_val;
-                        cls_index = cl;
-                    }
-                    else
-                    {
-                        if (cls_val > cls_max)
-                        {
+			if (0 == cl)
+			{
                             cls_max = cls_val;
                             cls_index = cl;
-                        }
+			}
+			else
+			{
+                            if (cls_val > cls_max)
+                            {
+                            	cls_max = cls_val;
+                            	cls_index = cl;
+                            }
+			}
                     }
-                }
-		
-                cls_max = sigmoid(DeQnt2F32(cls_max, quant_zp_cls, quant_scale_cls));
+                    cls_max = sigmoid(DeQnt2F32(cls_max, quant_zp_cls, quant_scale_cls));
+		}
 
                 if (cls_max > objectThresh)
                 {
